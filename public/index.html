@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookHub — Online Book Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="brand" onclick="navigate('home')">📚 BookHub</div>
+        <nav class="nav-links">
+            <button onclick="navigate('home')" id="nav-home" class="active">Home</button>
+            <button onclick="navigate('browse')" id="nav-browse">Browse Books</button>
+            <button onclick="navigate('search')" id="nav-search">Search Books</button>
+            <button onclick="navigate('dashboard')" id="nav-dashboard">Admin Dashboard</button>
+            <button onclick="navigate('add')" id="nav-add">Add Book</button>
+            <button onclick="navigate('manage')" id="nav-manage">Manage Books</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- 1. HOME PAGE -->
+        <section id="page-home" class="page active">
+            <div class="hero">
+                <h1>Welcome to BookHub</h1>
+                <p>Online Book Management System powered by Oracle Database</p>
+                <div class="hero-actions">
+                    <button class="btn-primary" onclick="navigate('browse')">Browse Catalog</button>
+                    <button class="btn-secondary" onclick="navigate('search')">Search Books</button>
+                    <button class="btn-outline" onclick="navigate('dashboard')">Admin Portal</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. BROWSE BOOKS PAGE -->
+        <section id="page-browse" class="page">
+            <h2>Browse Available Books</h2>
+            <div id="browse-grid" class="book-grid"></div>
+        </section>
+
+        <!-- 3. SEARCH BOOKS PAGE -->
+        <section id="page-search" class="page">
+            <h2>Search Books</h2>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search by book title or author..." oninput="handleSearch()">
+                <button class="btn-primary" onclick="handleSearch()">Search</button>
+            </div>
+            <div id="search-results" class="book-grid"></div>
+        </section>
+
+        <!-- 4. BOOK DETAILS PAGE -->
+        <section id="page-details" class="page">
+            <button class="btn-back" onclick="navigate('browse')">&larr; Back to Books</button>
+            <div id="book-details-card" class="details-card"></div>
+        </section>
+
+        <!-- 5. ADMIN DASHBOARD PAGE -->
+        <section id="page-dashboard" class="page">
+            <h2>Administrator Dashboard</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>Total Books in Catalog</h3>
+                    <p id="stat-total-books" class="stat-number">0</p>
+                    <span id="stat-db-mode" class="badge">Checking connection...</span>
+                </div>
+            </div>
+            <div class="dashboard-shortcuts">
+                <button class="btn-primary" onclick="navigate('add')">+ Add New Book</button>
+                <button class="btn-secondary" onclick="navigate('manage')">Manage Existing Books</button>
+            </div>
+        </section>
+
+        <!-- 6. ADD / EDIT BOOK PAGE -->
+        <section id="page-add" class="page">
+            <h2 id="form-heading">Add New Book</h2>
+            <form id="book-form" class="book-form" onsubmit="submitBookForm(event)">
+                <input type="hidden" id="book-id">
+                <div class="form-group">
+                    <label>Book Title *</label>
+                    <input type="text" id="book-title" required placeholder="e.g., Clean Code">
+                </div>
+                <div class="form-group">
+                    <label>Author *</label>
+                    <input type="text" id="book-author" required placeholder="e.g., Robert C. Martin">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Genre</label>
+                        <input type="text" id="book-genre" placeholder="e.g., Technology">
+                    </div>
+                    <div class="form-group">
+                        <label>Price ($) *</label>
+                        <input type="number" step="0.01" id="book-price" required placeholder="39.99">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Published Year</label>
+                        <input type="number" id="book-year" placeholder="2008">
+                    </div>
+                    <div class="form-group">
+                        <label>ISBN</label>
+                        <input type="text" id="book-isbn" placeholder="978-0132350884">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="book-desc" rows="4" placeholder="Enter book summary..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="form-submit-btn">Save Book</button>
+                    <button type="button" class="btn-outline" onclick="resetForm(); navigate('manage');">Cancel</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 7. MANAGE BOOKS PAGE -->
+        <section id="page-manage" class="page">
+            <div class="header-row">
+                <h2>Manage Book Records</h2>
+                <button class="btn-primary" onclick="resetForm(); navigate('add')">+ Add Book</button>
+            </div>
+            <div class="table-wrapper">
+                <table class="manage-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="manage-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="toast" class="toast"></div>
+    <script src="app.js"></script>
+</body>
+</html>
